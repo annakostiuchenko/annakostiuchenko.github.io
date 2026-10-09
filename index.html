@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Anna Kostiuchenko</title>
-<meta name="description" content="Anna Kostiuchenko, Data Analyst. Portfolio with CV and Excel, Tableau, Power BI and SQL projects.">
+<meta name="description" content="Anna Kostiuchenko, Data Analyst. Portfolio with CV, dashboards (Excel, Tableau, Power BI), SQL, AI agents and research.">
 <link rel="icon" href="anna.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -181,6 +181,28 @@ section.block{padding-block:44px}
 .code{margin:0;padding:16px 18px;background:#2b2d42;color:#e8e9f3;font-family:var(--f-mono);font-size:.8rem;line-height:1.6;overflow-x:auto;border-top:1.5px solid var(--line);tab-size:4}
 .code .k{color:#9fb4f0}.code .f{color:#7fd6c4}.code .s{color:#f6b8c8}.code .n{color:#f3d189}
 
+
+/* agents + research */
+.case{background:var(--surface);border-radius:26px;box-shadow:var(--shadow);padding:28px;display:grid;gap:20px}
+.case h4{font-family:var(--f-display);font-weight:600;font-size:1.35rem;margin:0}
+.case p{margin:0;color:var(--muted)}
+.pab{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.pab div{background:var(--bg);border-radius:16px;padding:14px 16px;min-width:0}
+.pab b{display:block;font-family:var(--f-mono);font-weight:500;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mint);margin-bottom:6px}
+.pab div:nth-child(1) b{color:var(--pink-ink)}.pab div:nth-child(2) b{color:var(--blue)}
+.pab span{font-size:.92rem;line-height:1.5;color:var(--ink)}
+.flow{background:var(--blue-soft);border-radius:18px;padding:12px;overflow-x:auto}
+.flow svg{display:block;width:100%;min-width:640px;height:auto}
+.pubs{display:grid;gap:18px}
+.pub{background:var(--surface);border-radius:24px;box-shadow:var(--shadow);padding:26px;display:grid;grid-template-columns:auto 1fr;gap:22px;align-items:start}
+.pub-badge{width:64px;height:78px;border-radius:12px;display:grid;place-items:center;font-family:var(--f-mono);font-size:.7rem;font-weight:500;letter-spacing:.06em;text-align:center;line-height:1.3;position:relative}
+.pub-badge::before{content:"";position:absolute;right:0;top:0;width:16px;height:16px;background:var(--surface);clip-path:polygon(0 0,100% 100%,100% 0);opacity:.8}
+.pub .meta-line{font-size:.85rem;color:var(--muted);margin:2px 0 10px}
+.pub h4{font-family:var(--f-display);font-weight:600;font-size:1.22rem;margin:0;text-wrap:balance}
+.pub p{margin:0 0 12px;color:var(--muted)}
+.pub .authors b{color:var(--ink);font-weight:700}
+@media (max-width:760px){.pab{grid-template-columns:1fr}.pub{grid-template-columns:1fr}.pub-badge{width:56px;height:68px}.case{padding:20px}}
+
 /* work */
 .tool-nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px}
 .shelf{padding-block:30px}
@@ -272,6 +294,8 @@ footer{padding-block:30px 40px;text-align:center;color:var(--muted);font-size:.8
       <li><a href="#tableau">Tableau</a></li>
       <li><a href="#powerbi">Power BI</a></li>
       <li><a href="#sql">SQL</a></li>
+      <li><a href="#agents">AI</a></li>
+      <li><a href="#research">Research</a></li>
     </ul>
   </div>
 </nav>
@@ -718,6 +742,85 @@ FROM scored;
 COPY cohorts TO &#x27;/Users/anna/Downloads/cohorts.csv&#x27; (HEADER);
 COPY rfm TO &#x27;/Users/anna/Downloads/rfm.csv&#x27; (HEADER);
 </textarea>
+    </div>
+
+    <!-- AI & Agents -->
+    <div class="shelf" id="agents">
+      <div class="shelf-head">
+        <div class="tool-icon" style="background:var(--blue-soft);color:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="11" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M2 13v2M22 13v2"/></svg></div>
+        <div><h3>AI &amp; Agents</h3><p>Agents that make data usable for people without SQL</p></div>
+      </div>
+      <article class="case">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span class="tag blue" style="align-self:flex-start">Data agent · banking</span>
+          <h4>A DWH agent that sizes target audiences on demand</h4>
+          <p>Built at PUMB. The approach is shown here; the bank's data stays private.</p>
+        </div>
+        <div class="pab">
+          <div><b>Problem</b><span>Managers wanted to test target-audience ideas, like how many clients match certain criteria, but had no SQL skills or DWH knowledge. Every question went through a small analyst team, so testing hypotheses was slow.</span></div>
+          <div><b>Approach</b><span>I duplicated the relevant database, anonymised and aggregated it, and built one wide table of client attributes. Then I connected that table to an AI agent that turns a plain-language question into a query.</span></div>
+          <div><b>Result</b><span>Managers can ask in their own words and get the size of a target audience in moments, so they go into a campaign with clear expectations, and analysts spend less time on one-off counts.</span></div>
+        </div>
+        <div class="flow"><svg viewBox="0 0 900 230" role="img" aria-label="How the DWH agent works: the warehouse is copied, anonymised and aggregated into one wide table; the agent answers a manager's audience question from that table">
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#73758f"/></marker></defs>
+  <g font-family="Nunito Sans, system-ui, sans-serif" fill="#2f3047">
+    <g><rect x="16" y="40" width="150" height="70" rx="14" fill="#fff" stroke="#c9cdee"/><text x="91" y="70" text-anchor="middle" font-weight="700" font-size="15">Bank DWH</text><text x="91" y="92" text-anchor="middle" font-size="12.5" fill="#73758f">client-level data</text></g>
+    <g><rect x="206" y="40" width="170" height="70" rx="14" fill="#fff" stroke="#c9cdee"/><text x="291" y="70" text-anchor="middle" font-weight="700" font-size="15">Copy</text><text x="291" y="92" text-anchor="middle" font-size="12.5" fill="#73758f">separate from production</text></g>
+    <g><rect x="416" y="40" width="190" height="70" rx="14" fill="#fff" stroke="#c9cdee"/><text x="511" y="70" text-anchor="middle" font-weight="700" font-size="15">Anonymise + aggregate</text><text x="511" y="92" text-anchor="middle" font-size="12.5" fill="#73758f">no personal data left</text></g>
+    <g><rect x="646" y="40" width="236" height="70" rx="14" fill="#e9f7f3" stroke="#5fbba8" stroke-width="1.6"/><text x="764" y="70" text-anchor="middle" font-weight="700" font-size="15">Wide table</text><text x="764" y="92" text-anchor="middle" font-size="12.5" fill="#73758f">one row, many attributes</text></g>
+    <g stroke="#73758f" stroke-width="1.4" fill="none"><path d="M166 75H202" marker-end="url(#ar)"/><path d="M376 75H412" marker-end="url(#ar)"/><path d="M606 75H642" marker-end="url(#ar)"/><path d="M764 110V146" marker-end="url(#ar)"/><path d="M262 185H642" marker-end="url(#ar)"/><path d="M646 202H266" marker-end="url(#ar)"/></g>
+    <g><rect x="646" y="150" width="236" height="70" rx="14" fill="#6f84d6"/><text x="764" y="180" text-anchor="middle" font-weight="700" font-size="15" fill="#fff">AI agent</text><text x="764" y="202" text-anchor="middle" font-size="12.5" fill="#eef0fc">writes and runs the query</text></g>
+    <g><rect x="16" y="150" width="246" height="70" rx="14" fill="#fef0f3" stroke="#f4b6c6"/><text x="139" y="180" text-anchor="middle" font-weight="700" font-size="15">Manager</text><text x="139" y="202" text-anchor="middle" font-size="12.5" fill="#73758f">no SQL or DWH knowledge</text></g>
+    <text x="452" y="176" text-anchor="middle" font-size="12.5" fill="#73758f">"How many clients aged 25–35 have a card but no loan?"</text>
+    <text x="452" y="222" text-anchor="middle" font-size="12.5" fill="#73758f">audience size in seconds</text>
+  </g>
+</svg></div>
+        <div class="stack"><span>DWH</span><span>SQL</span><span>Data anonymisation</span><span>Wide-table design</span><span>LLM agent</span></div>
+      </article>
+    </div>
+
+    <!-- Research -->
+    <div class="shelf" id="research">
+      <div class="shelf-head">
+        <div class="tool-icon" style="background:var(--blush-soft);color:var(--pink-ink)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5zM20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/></svg></div>
+        <div><h3>Research</h3><p>How AI and LLM agents shape decisions in firms</p></div>
+      </div>
+      <div class="pubs">
+        <article class="pub">
+          <div class="pub-badge" style="background:var(--blush-soft);color:var(--pink-ink)">PAPER<br>2026</div>
+          <div>
+            <h4>Synthetic Firms: Employing LLMs as Organisational Simulacra</h4>
+            <p class="meta-line authors">Johannes Dahlke, Flavio Calvino (OECD), <b>Anna Kostiuchenko</b> · SSRN working paper, May 2026 · 40 pages</p>
+            <p>Can large language models, guided by economic theory and calibrated with real data, imitate how firms innovate? We built natural-language profiles of German firms and compared an uncalibrated model with two versions calibrated using web-derived indicators and patent data. The uncalibrated model mostly overpredicts innovation; both calibrated versions are much more accurate and match real patterns across industries, including in a validation on a later period.</p>
+            <div class="dl-row"><a class="dl" href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6681238" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>Read on SSRN</a><span class="dl-note">DOI 10.2139/ssrn.6681238</span></div>
+            <div class="stack" style="margin-top:12px"><span>LLMs</span><span>Simulation</span><span>Synthetic data</span><span>Innovation</span><span>Calibration</span></div>
+          </div>
+        </article>
+        <article class="pub">
+          <div class="pub-badge" style="background:var(--blue-soft);color:var(--blue)">MSc<br>THESIS</div>
+          <div>
+            <h4>How can theory-grounded LLM-based agents synthetically represent firms to predict real-world, firm-level technology adoption?</h4>
+            <p class="meta-line">MSc Business Administration, Digital Business Analytics · University of Twente, July 2026 · supervised by Dr. J. Dahlke and Dr. G. Sedrakyan</p>
+            <p>I built LLM agents (GPT-4o mini) that each represent a real firm and predict whether it adopts AI tools. I tested them on 3,531 German automotive manufacturers, compared six management theories as the agents' reasoning lens, and grounded them with a peer signal from the 25 most similar firms. Results were validated against real adoption data and official ZEW, ifo and OECD statistics.</p>
+            <ul class="find" style="margin-bottom:12px">
+              <li>Without grounding, the LLM barely beats chance and leans almost entirely on firm size. Pairing theory with a peer-adoption signal raises accuracy substantially.</li>
+              <li>Diffusion of Innovations and Porter's Five Forces were the strongest lenses. Extra firm data helped only when the theory could use it, and splitting complex predictions into simpler steps worked better than one pass.</li>
+            </ul>
+            <div class="dl-row" style="margin-bottom:12px"><a class="dl" href="https://purl.utwente.nl/essays/111275" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>Read the thesis</a></div>
+            <div class="stack"><span>Python</span><span>OpenAI API</span><span>KNN</span><span>Design-Based Research</span><span>AUC evaluation</span></div>
+          </div>
+        </article>
+        <article class="pub">
+          <div class="pub-badge" style="background:var(--mint-soft);color:var(--mint)">BSc<br>THESIS</div>
+          <div>
+            <h4>How can Generative AI influence decision-making in early stage startups operating under high uncertainty?</h4>
+            <p class="meta-line">BSc International Business Administration · University of Twente, June 2025</p>
+            <p>A mixed-methods study (a survey plus interviews with early-stage founders) on how GenAI tools shape startup decision-making. Most founders use a hybrid approach, relying on GenAI for marketing, technical work, ideation and research. Despite worries about hallucinations, trust and prompting skills, they see it as a practical way to work faster, cut costs and experiment more. The thesis proposes a framework for intentional GenAI adoption built on trust calibration, prompt literacy and scalable integration.</p>
+            <div class="dl-row" style="margin-bottom:12px"><a class="dl" href="https://purl.utwente.nl/essays/106740" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>Read the thesis</a></div>
+            <div class="stack"><span>Mixed methods</span><span>Survey</span><span>Interviews</span><span>GenAI adoption</span><span>Entrepreneurship</span></div>
+          </div>
+        </article>
+      </div>
     </div>
   </section>
 
