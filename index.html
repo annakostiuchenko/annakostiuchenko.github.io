@@ -456,6 +456,32 @@ footer{padding-block:30px 40px;text-align:center;color:var(--muted);font-size:.8
           <div class="stack"><span>Tableau</span><span>DuckDB SQL</span><span>Cohort analysis</span><span>RFM segmentation</span></div>
         </div>
       </article>
+      <article class="project side-by-side" style="margin-top:22px">
+        <button class="shot mint" type="button" data-full="tableau-housing.jpg" aria-label="Open the Tableau Dutch housing dashboard full size">
+          <div class="frame"><div class="dots"><i></i><i></i><i></i></div>
+            <div class="tall"><img src="tableau-housing.jpg" alt="Tableau dashboard of Dutch house prices 1995–2025: national trend, Enschede compared with the Netherlands, the 15 fastest-rising municipalities and a province map coloured by growth" loading="lazy"></div>
+          </div>
+        </button>
+        <div class="p-body">
+          <span class="tag mint" style="align-self:flex-start">Public data · SQL + Tableau</span>
+          <h4>Dutch Housing Market · 1995–2025</h4>
+          <p>How much have Dutch house prices risen, and where? I joined and cleaned 30 years of official CBS data for all 342 municipalities in SQL, then built a Tableau dashboard where you can compare any municipality with the national average.</p>
+          <div class="kpis">
+            <div class="kpi"><b>~5×</b><span>national average price, 1995 to 2025 (€480K)</span></div>
+            <div class="kpi"><b>Flevoland</b><span>fastest-rising province since 2015</span></div>
+            <div class="kpi"><b>−22%</b><span>Enschede below the national average</span></div>
+          </div>
+          <p class="label">Key insights</p>
+          <ul class="find">
+            <li>Prices dipped after 2008 and again in 2022–23, but the long-term rise is steep.</li>
+            <li>The fastest risers are commuter towns around Amsterdam and in Flevoland, such as Almere, Purmerend and Lelystad.</li>
+            <li>Growth uses 3-year averages (2013–15 vs 2023–25), so one unusual year can't distort the ranking. Diemen still tops the list, partly because of a jump in 2018 that likely reflects more new-build sales.</li>
+          </ul>
+          <p class="dl-note">Data: CBS table 83625NED, average sale price of existing homes. This is not a price index, so changes in which homes are sold affect it.</p>
+          <div class="dl-row"><a class="dl" href="Dutch_Housing_Dashboard.twbx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download workbook <small>.twbx</small></a></div>
+          <div class="stack"><span>Tableau</span><span>DuckDB SQL</span><span>LOD expressions</span><span>Parameters</span><span>Maps</span></div>
+        </div>
+      </article>
     </div>
 
     <!-- Power BI -->
