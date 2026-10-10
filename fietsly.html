@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Fietsly Feedback Triage</title>
+<meta name="description" content="Live dashboard of AI-tagged customer feedback. A portfolio project by Anna Kostiuchenko.">
+<link rel="icon" href="anna.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+/* Same visual system as the portfolio: airy lavender-white, periwinkle, mint, pink */
+:root{
+  --bg:#fcfbff;--surface:#fff;--ink:#2f3047;--muted:#73758f;--line:#eeebf8;
+  --blue:#6f84d6;--mint:#5fbba8;--blush:#f4b6c6;--pink-ink:#c86d86;
+  --blue-soft:#f0f1fd;--mint-soft:#e9f7f3;--blush-soft:#fef0f3;
+  --pos:#5fbba8;--neu:#b9bccd;--neg:#d9798f;
+  --shadow:0 1px 2px rgba(47,48,71,.04),0 10px 30px rgba(111,132,214,.08);
+  --f-display:"Fredoka","Nunito Sans",system-ui,sans-serif;
+  --f-body:"Nunito Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6;
+  background-image:radial-gradient(#ece8fb 1px,transparent 1px);background-size:24px 24px}
+a{color:var(--blue);text-underline-offset:3px}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;line-height:1.15;margin:0;text-wrap:balance}
+.wrap{max-width:1080px;margin:0 auto;padding-inline:20px;padding-block:28px 48px;display:grid;gap:20px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.back{font-weight:700;text-decoration:none;color:var(--muted)}
+.back:hover{color:var(--ink)}
+.card{background:var(--surface);border-radius:24px;box-shadow:var(--shadow);padding:24px;min-width:0}
+.hero{display:grid;grid-template-columns:1.3fr 1fr;gap:24px;align-items:center}
+.tag{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--blue-soft);color:var(--blue);display:inline-block;margin-bottom:10px}
+.hero h1{font-size:clamp(1.8rem,4vw,2.5rem)}
+.hero p{color:var(--muted);margin:10px 0 16px;max-width:58ch}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:999px;font-weight:700;text-decoration:none;border:1.5px solid var(--line);color:var(--ink);background:var(--surface)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn:hover{border-color:var(--mint)}
+.btn.primary:hover{background:var(--mint);border-color:var(--mint)}
+.flow{display:grid;gap:8px}
+.step{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:center;background:var(--bg);border-radius:14px;padding:10px 12px;font-size:.9rem}
+.step b{display:block;font-family:var(--f-display);font-weight:600;font-size:.98rem}
+.step span{color:var(--muted)}
+.step i{font-style:normal;width:30px;height:30px;border-radius:10px;display:grid;place-items:center;font-family:var(--f-mono);font-size:.8rem;background:var(--mint-soft);color:var(--mint)}
+.step.ai i{background:var(--blue);color:#fff}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi{background:var(--surface);border-radius:20px;box-shadow:var(--shadow);padding:16px 18px}
+.kpi b{display:block;font-family:var(--f-display);font-weight:600;font-size:1.9rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--muted);font-size:.86rem}
+.kpi.neg b{color:var(--neg)}.kpi.urg b{color:var(--pink-ink)}
+.grid2{display:grid;grid-template-columns:1.2fr 1fr;gap:20px}
+.card h2{font-size:1.15rem;margin-bottom:4px}
+.card .sub{color:var(--muted);font-size:.86rem;margin:0 0 12px}
+.chart{position:relative;height:280px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.84rem;color:var(--muted);margin-bottom:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.controls label{font-size:.84rem;color:var(--muted);font-weight:700}
+select{font:inherit;font-size:.9rem;padding:7px 12px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+select:focus-visible,.btn:focus-visible{outline:3px solid var(--mint);outline-offset:2px}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th{text-align:left;font-family:var(--f-mono);font-weight:500;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:8px 10px;border-bottom:1.5px solid var(--line)}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+td.date{white-space:nowrap;color:var(--muted);font-variant-numeric:tabular-nums}
+.pill{display:inline-block;font-size:.76rem;font-weight:700;padding:2px 9px;border-radius:999px;white-space:nowrap}
+.pill.Negative{background:var(--blush-soft);color:var(--pink-ink)}
+.pill.Positive{background:var(--mint-soft);color:#3f8f7f}
+.pill.Neutral{background:var(--blue-soft);color:var(--muted)}
+.note{font-size:.82rem;color:var(--muted)}
+.status{font-size:.84rem;color:var(--muted)}
+.empty{padding:30px;text-align:center;color:var(--muted)}
+@media (max-width:820px){.hero,.grid2{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top">
+    <a class="back" href="index.html#agents">← Back to portfolio</a>
+    <span class="status" id="status">Loading live data…</span>
+  </div>
+
+  <section class="card hero">
+    <div>
+      <span class="tag">AI automation · live</span>
+      <h1>Fietsly feedback triage</h1>
+      <p>Every piece of feedback sent through the form is read by an AI model, tagged with sentiment, topic and urgency, and summarised in one line. This dashboard updates on its own. Fietsly is a made-up bike rental company in Enschede.</p>
+      <div class="btns">
+        <a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSdlhaClsHVY4wXAnvK_wn8pdBQDbvc5ueUq80MZA0-pk1-yiQ/viewform" target="_blank" rel="noopener">Try it: leave feedback</a>
+        <a class="btn" href="#how">How it works</a>
+      </div>
+    </div>
+    <div class="flow" id="how" aria-label="How the pipeline works">
+      <div class="step"><i>1</i><div><b>Google Form</b><span>A customer submits feedback</span></div></div>
+      <div class="step"><i>2</i><div><b>Google Sheet</b><span>The response is stored as a new row</span></div></div>
+      <div class="step ai"><i>AI</i><div><b>Apps Script + Gemini</b><span>Tags sentiment, topic, urgency and writes a summary</span></div></div>
+      <div class="step"><i>4</i><div><b>This dashboard</b><span>Reads a privacy-safe copy without emails</span></div></div>
+    </div>
+  </section>
+
+  <div class="controls card" style="padding:14px 20px">
+    <label for="f-topic">Topic</label>
+    <select id="f-topic"><option value="">All topics</option></select>
+    <label for="f-channel">Channel</label>
+    <select id="f-channel"><option value="">All channels</option></select>
+  </div>
+
+  <section class="kpis" aria-label="Key numbers">
+    <div class="kpi"><b id="k-total">–</b><span>Feedback received</span></div>
+    <div class="kpi neg"><b id="k-neg">–</b><span>Negative share</span></div>
+    <div class="kpi urg"><b id="k-urg">–</b><span>Urgent issues</span></div>
+    <div class="kpi"><b id="k-rating">–</b><span>Average rating (1–5)</span></div>
+  </section>
+
+  <section class="grid2">
+    <div class="card">
+      <h2>What people talk about</h2>
+      <p class="sub">Feedback per topic, split by sentiment</p>
+      <div class="legend"><span><i style="background:var(--pos)"></i>Positive</span><span><i style="background:var(--neu)"></i>Neutral</span><span><i style="background:var(--neg)"></i>Negative</span></div>
+      <div class="chart"><canvas id="c-topic" role="img" aria-label="Stacked bar chart of feedback per topic by sentiment"></canvas></div>
+    </div>
+    <div class="card">
+      <h2>Feedback over time</h2>
+      <p class="sub">Responses per week, split by sentiment</p>
+      <div class="legend"><span><i style="background:var(--pos)"></i>Positive</span><span><i style="background:var(--neu)"></i>Neutral</span><span><i style="background:var(--neg)"></i>Negative</span></div>
+      <div class="chart"><canvas id="c-week" role="img" aria-label="Weekly feedback count by sentiment"></canvas></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Urgent issues to act on</h2>
+    <p class="sub">Feedback the AI marked as high urgency, newest first</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Date</th><th>Topic</th><th>Channel</th><th>Sentiment</th><th>AI summary</th></tr></thead>
+        <tbody id="t-urgent"><tr><td colspan="5" class="empty">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+
+  <p class="note">Includes 55 sample responses written for the demo, plus real submissions. New feedback usually appears within a few minutes; the published data refreshes about every 5 minutes. Emails and full feedback texts are never published. Built with Google Forms, Sheets, Apps Script, the Gemini API and Chart.js.</p>
+</main>
+
+<script>
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTXD7P-P26p13ST34EO_gwEBXIU00KUU2mD6w4bphv-z0bWrqDFCE4Gb8PC_XdG_ADP9TfPkKRjdGz7/pub?gid=186603304&single=true&output=csv';
+const SENTS = ['Positive', 'Neutral', 'Negative'];
+const COLORS = { Positive: '#5fbba8', Neutral: '#b9bccd', Negative: '#d9798f' };
+let all = [], charts = {};
+
+function parseCSV(text) {
+  const rows = []; let row = [], cell = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"' && text[i + 1] === '"') { cell += '"'; i++; } else if (c === '"') q = false; else cell += c; }
+    else if (c === '"') q = true;
+    else if (c === ',') { row.push(cell); cell = ''; }
+    else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
+    else cell += c;
+  }
+  if (cell || row.length) { row.push(cell); rows.push(row); }
+  return rows;
+}
+function parseDate(s) {
+  s = (s || '').trim();
+  let m = s.match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})(?:\s+(\d{1,2}):(\d{2}))?/);
+  if (m) return new Date(+m[3], +m[2] - 1, +m[1], +(m[4] || 0), +(m[5] || 0));
+  m = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[ T](\d{1,2}):(\d{2}))?/);
+  if (m) return new Date(+m[1], +m[2] - 1, +m[3], +(m[4] || 0), +(m[5] || 0));
+  m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+(\d{1,2}):(\d{2}))?/);
+  if (m) return new Date(+m[3], +m[1] - 1, +m[2], +(m[4] || 0), +(m[5] || 0));
+  const d = new Date(s); return isNaN(d) ? null : d;
+}
+function weekStart(d) { const x = new Date(d); const day = (x.getDay() + 6) % 7; x.setDate(x.getDate() - day); x.setHours(0,0,0,0); return x; }
+const fmtDay = d => d ? d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '';
+
+async function load() {
+  const status = document.getElementById('status');
+  try {
+    const res = await fetch(CSV_URL + (CSV_URL.includes('?') ? '&' : '?') + 't=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const rows = parseCSV(await res.text()).filter(r => r.some(c => c.trim()));
+    all = rows.slice(1).map(r => ({
+      date: parseDate(r[0]), rating: parseFloat(String(r[1]).replace(',', '.')), channel: (r[2] || '').trim() || 'Unknown',
+      sentiment: (r[3] || '').trim(), topic: (r[4] || '').trim(), urgency: (r[5] || '').trim(), summary: (r[6] || '').trim()
+    })).filter(r => SENTS.includes(r.sentiment));
+    fillSelect('f-topic', [...new Set(all.map(r => r.topic))].sort());
+    fillSelect('f-channel', [...new Set(all.map(r => r.channel))].sort());
+    status.textContent = 'Live data · updated ' + new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+    render();
+  } catch (e) {
+    status.textContent = 'Could not load the live data right now. Please try again later.';
+    document.getElementById('t-urgent').innerHTML = '<tr><td colspan="5" class="empty">The data source is not reachable at the moment.</td></tr>';
+  }
+}
+function fillSelect(id, vals) {
+  const el = document.getElementById(id);
+  vals.forEach(v => { const o = document.createElement('option'); o.value = o.textContent = v; el.appendChild(o); });
+  el.addEventListener('change', render);
+}
+function render() {
+  const t = document.getElementById('f-topic').value, c = document.getElementById('f-channel').value;
+  const rows = all.filter(r => (!t || r.topic === t) && (!c || r.channel === c));
+  const n = rows.length;
+  document.getElementById('k-total').textContent = n;
+  document.getElementById('k-neg').textContent = n ? Math.round(rows.filter(r => r.sentiment === 'Negative').length / n * 100) + '%' : '–';
+  document.getElementById('k-urg').textContent = rows.filter(r => r.urgency === 'High').length;
+  const rated = rows.filter(r => !isNaN(r.rating));
+  document.getElementById('k-rating').textContent = rated.length ? (rated.reduce((a, r) => a + r.rating, 0) / rated.length).toFixed(1) : '–';
+
+  // Topic x sentiment, sorted by total
+  const topics = [...new Set(rows.map(r => r.topic))].sort((a, b) => rows.filter(r => r.topic === b).length - rows.filter(r => r.topic === a).length);
+  drawBar('c-topic', topics, SENTS.map(s => ({ label: s, data: topics.map(tp => rows.filter(r => r.topic === tp && r.sentiment === s).length), backgroundColor: COLORS[s], borderRadius: 4, borderSkipped: false })), true);
+
+  // Weekly counts
+  const dated = rows.filter(r => r.date);
+  let weeks = [];
+  if (dated.length) {
+    const first = weekStart(new Date(Math.min(...dated.map(r => r.date)))), last = weekStart(new Date(Math.max(...dated.map(r => r.date))));
+    for (let d = new Date(first); d <= last; d.setDate(d.getDate() + 7)) weeks.push(new Date(d));
+  }
+  drawBar('c-week', weeks.map(fmtDay), SENTS.map(s => ({ label: s, data: weeks.map(w => dated.filter(r => r.sentiment === s && +weekStart(r.date) === +w).length), backgroundColor: COLORS[s], borderRadius: 3, borderSkipped: false })), false);
+
+  // Urgent table
+  const urgent = rows.filter(r => r.urgency === 'High').sort((a, b) => (b.date || 0) - (a.date || 0)).slice(0, 10);
+  const tb = document.getElementById('t-urgent'); tb.innerHTML = '';
+  if (!urgent.length) { tb.innerHTML = '<tr><td colspan="5" class="empty">No urgent issues for this selection.</td></tr>'; return; }
+  urgent.forEach(r => {
+    const tr = document.createElement('tr');
+    [['date', fmtDay(r.date)], ['', r.topic], ['', r.channel]].forEach(([cls, v]) => { const td = document.createElement('td'); if (cls) td.className = cls; td.textContent = v; tr.appendChild(td); });
+    const ts = document.createElement('td'); const p = document.createElement('span'); p.className = 'pill ' + r.sentiment; p.textContent = r.sentiment; ts.appendChild(p); tr.appendChild(ts);
+    const tsum = document.createElement('td'); tsum.textContent = r.summary; tr.appendChild(tsum);
+    tb.appendChild(tr);
+  });
+}
+function drawBar(id, labels, datasets, horizontal) {
+  if (charts[id]) charts[id].destroy();
+  charts[id] = new Chart(document.getElementById(id), {
+    type: 'bar',
+    data: { labels, datasets },
+    options: {
+      indexAxis: horizontal ? 'y' : 'x', maintainAspectRatio: false, animation: false,
+      plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+      scales: {
+        x: { stacked: true, grid: { display: !horizontal ? false : true, color: '#eeebf8' }, ticks: { color: '#73758f', precision: 0, font: { family: 'Nunito Sans' } } },
+        y: { stacked: true, grid: { display: horizontal ? false : true, color: '#eeebf8' }, ticks: { color: '#2f3047', precision: 0, font: { family: 'Nunito Sans' } } }
+      }
+    }
+  });
+}
+load();
+</script>
+</body>
+</html>

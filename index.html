@@ -156,6 +156,7 @@ section.block{padding-block:44px}
 .dl-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 .dl{display:inline-flex;align-items:center;gap:7px;padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);
   color:var(--ink);font:700 .86rem var(--f-body);cursor:pointer;transition:background .2s,border-color .2s}
+a.dl{text-decoration:none}
 .dl:hover{background:var(--mint-soft);border-color:var(--mint)}
 .dl svg{width:16px;height:16px;color:var(--mint)}
 .dl small{font-family:var(--f-mono);font-weight:400;color:var(--muted);font-size:.72rem}
@@ -553,7 +554,7 @@ footer{padding-block:30px 40px;text-align:center;color:var(--muted);font-size:.8
     <div class="shelf" id="agents">
       <div class="shelf-head">
         <div class="tool-icon" style="background:var(--blue-soft);color:var(--blue)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="11" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01M2 13v2M22 13v2"/></svg></div>
-        <div><h3>AI &amp; Agents</h3><p>Agents that make data usable for people without SQL</p></div>
+        <div><h3>AI &amp; Agents</h3><p>AI that does real work: answering data questions and triaging feedback</p></div>
       </div>
       <article class="case">
         <div style="display:flex;flex-direction:column;gap:10px">
@@ -581,6 +582,23 @@ footer{padding-block:30px 40px;text-align:center;color:var(--muted);font-size:.8
   </g>
 </svg></div>
         <div class="stack"><span>DWH</span><span>SQL</span><span>Data anonymisation</span><span>Wide-table design</span><span>LLM agent</span></div>
+      </article>
+      <article class="case" style="margin-top:22px">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span class="tag mint" style="align-self:flex-start">AI automation · live demo</span>
+          <h4>Fietsly: AI feedback triage you can try</h4>
+          <p>A working pipeline for a made-up bike rental company. Feedback from a form is tagged by Gemini and appears on a live dashboard.</p>
+        </div>
+        <div class="pab">
+          <div><b>Problem</b><span>Support teams drown in free-text feedback. Reading every message to spot safety issues or wrong charges is slow, and urgent cases get buried.</span></div>
+          <div><b>Approach</b><span>Google Form → Sheet → Apps Script sends each response to Gemini, which returns sentiment, topic, urgency and a one-line summary. Only allowed values are accepted, failed rows retry automatically, and a privacy-safe copy without emails feeds the dashboard.</span></div>
+          <div><b>Result</b><span>Every response is triaged within seconds, urgent issues surface in an action list, and the model resisted a prompt-injection attempt hidden in the feedback.</span></div>
+        </div>
+        <div class="dl-row">
+          <a class="dl primary" href="https://annakostiuchenko.github.io/fietsly.html" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>Open live dashboard</a>
+          <a class="dl" href="https://docs.google.com/forms/d/e/1FAIpQLSdlhaClsHVY4wXAnvK_wn8pdBQDbvc5ueUq80MZA0-pk1-yiQ/viewform" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>Try it: leave feedback</a>
+        </div>
+        <div class="stack"><span>Google Apps Script</span><span>Gemini API</span><span>Prompt design</span><span>Automation</span><span>Chart.js</span></div>
       </article>
     </div>
 
