@@ -203,6 +203,15 @@ section.block{padding-block:44px}
 .pub .authors b{color:var(--ink);font-weight:700}
 @media (max-width:760px){.pab{grid-template-columns:1fr}.pub{grid-template-columns:1fr}.pub-badge{width:56px;height:68px}.case{padding:20px}}
 
+
+.sql-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.sql-mini{background:var(--surface);border-radius:22px;box-shadow:var(--shadow);padding:22px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.sql-mini h4{font-family:var(--f-display);font-weight:600;font-size:1.12rem;margin:0}
+.sql-mini p{margin:0;color:var(--muted);font-size:.93rem}
+.sql-mini .dl{align-self:flex-start;margin-top:auto;text-decoration:none}
+.sql-mini .dl svg{color:var(--ink)}
+@media (max-width:700px){.sql-grid{grid-template-columns:1fr}}
+
 /* work */
 .tool-nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px}
 .shelf{padding-block:30px}
@@ -451,7 +460,7 @@ footer{padding-block:30px 40px;text-align:center;color:var(--muted);font-size:.8
             <li>Champions (27% of customers) bring 70% of revenue; Lost customers (28%) bring just 4%.</li>
             <li>Recommendation: a January win-back campaign for holiday first-time buyers, and targeting the At-risk segment (12% of customers, 9% of revenue) before they are lost.</li>
           </ul>
-          <p class="dl-note">Data ends 9 Dec 2011, so each cohort's last month is incomplete. The SQL behind it is in the <a href="#sql">SQL section</a>.</p>
+          <p class="dl-note">Data ends 9 Dec 2011, so each cohort's last month is incomplete. The SQL is in the <a href="#sql">SQL section</a>.</p>
           <div class="dl-row"><a class="dl" href="Customer_Retention_Project.twbx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download workbook <small>.twbx</small></a></div>
           <div class="stack"><span>Tableau</span><span>DuckDB SQL</span><span>Cohort analysis</span><span>RFM segmentation</span></div>
         </div>
@@ -520,254 +529,24 @@ footer{padding-block:30px 40px;text-align:center;color:var(--muted);font-size:.8
     <div class="shelf" id="sql">
       <div class="shelf-head">
         <div class="tool-icon" style="background:var(--mint-soft);color:var(--mint)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/><path d="M4.5 5.5v13c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8v-13M4.5 12c0 1.5 3.4 2.8 7.5 2.8s7.5-1.3 7.5-2.8"/></svg></div>
-        <div><h3>SQL</h3><p>CTEs, window functions and data-quality checks</p></div>
+        <div><h3>SQL</h3><p>The queries behind the dashboards, written in DuckDB</p></div>
       </div>
-      <article class="project sql-card">
-        <div class="p-body">
-          <span class="tag mint" style="align-self:flex-start">DuckDB · DBeaver</span>
-          <h4>Customer Retention · the SQL pipeline</h4>
-          <p>The full pipeline behind the retention dashboard, from a raw Excel file to two clean tables for Tableau. Open a step to read the query.</p>
-          <div class="steps">
-        <details class="step">
-          <summary><span class="num">1</span><span class="st"><b>Load</b><small>Read both Excel sheets into one table with the column types spelled out, so cancelled invoices (C489449) don&#x27;t break type detection. 1,067,371 rows.</small></span></summary>
-          <pre class="code"><code><span class="k">INSTALL</span> excel;
-<span class="k">LOAD</span> excel;
-
-
-<span class="k">CREATE</span> <span class="k">TABLE</span> raw (
-    Invoice       VARCHAR,
-    StockCode     VARCHAR,
-    Description   VARCHAR,
-    Quantity      INTEGER,
-    InvoiceDate   TIMESTAMP,
-    Price         DOUBLE,
-    <span class="s">&quot;Customer ID&quot;</span> DOUBLE,
-    Country       VARCHAR
-);
-
-<span class="k">COPY</span> raw <span class="k">FROM</span> <span class="s">&#x27;/Users/anna/Downloads/online_retail_II.xlsx&#x27;</span>
-    (<span class="k">FORMAT</span> xlsx, <span class="k">SHEET</span> <span class="s">&#x27;Year 2009-2010&#x27;</span>, <span class="k">HEADER</span> <span class="k">true</span>);
-
-<span class="k">COPY</span> raw <span class="k">FROM</span> <span class="s">&#x27;/Users/anna/Downloads/online_retail_II.xlsx&#x27;</span>
-    (<span class="k">FORMAT</span> xlsx, <span class="k">SHEET</span> <span class="s">&#x27;Year 2010-2011&#x27;</span>, <span class="k">HEADER</span> <span class="k">true</span>);
-
-<span class="k">SELECT</span> <span class="f">COUNT</span>(*) <span class="k">FROM</span> raw;</code></pre>
-        </details>
-        <details class="step">
-          <summary><span class="num">2</span><span class="st"><b>Check data quality</b><small>Count what each cleaning rule catches before deleting anything: missing customers, cancellations, zero or negative quantities and prices, and 34,335 exact duplicates.</small></span></summary>
-          <pre class="code"><code><span class="k">SELECT</span>
-    <span class="f">COUNT</span>(*)                                                       <span class="k">AS</span> total_rows,
-    <span class="f">COUNT</span>(*) <span class="k">FILTER</span> (<span class="k">WHERE</span> <span class="s">&quot;Customer ID&quot;</span> <span class="k">IS</span> <span class="k">NULL</span>)                  <span class="k">AS</span> no_customer,
-    <span class="f">COUNT</span>(*) <span class="k">FILTER</span> (<span class="k">WHERE</span> <span class="f">starts_with</span>(Invoice, <span class="s">&#x27;C&#x27;</span>))              <span class="k">AS</span> cancellations,
-    <span class="f">COUNT</span>(*) <span class="k">FILTER</span> (<span class="k">WHERE</span> Quantity &lt;= <span class="n">0</span>)                          <span class="k">AS</span> zero_or_negative_qty,
-    <span class="f">COUNT</span>(*) <span class="k">FILTER</span> (<span class="k">WHERE</span> Price &lt;= <span class="n">0</span>)                             <span class="k">AS</span> zero_or_negative_price,
-    <span class="f">COUNT</span>(*) - (<span class="k">SELECT</span> <span class="f">COUNT</span>(*) <span class="k">FROM</span> (<span class="k">SELECT</span> <span class="k">DISTINCT</span> * <span class="k">FROM</span> raw)) <span class="k">AS</span> exact_duplicates
-<span class="k">FROM</span> raw;</code></pre>
-        </details>
-        <details class="step">
-          <summary><span class="num">3</span><span class="st"><b>Clean</b><small>Keep real purchases by known customers, remove duplicates and add revenue. Leaves 5,878 customers.</small></span></summary>
-          <pre class="code"><code><span class="k">CREATE</span> <span class="k">TABLE</span> sales <span class="k">AS</span>
-<span class="k">SELECT</span> <span class="k">DISTINCT</span>
-    Invoice,
-    StockCode,
-    Description,
-    Quantity,
-    InvoiceDate,
-    Price,
-    <span class="s">&quot;Customer ID&quot;</span> <span class="k">AS</span> customer_id,
-    Country,
-    Quantity * Price <span class="k">AS</span> revenue
-<span class="k">FROM</span> raw
-<span class="k">WHERE</span> <span class="s">&quot;Customer ID&quot;</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
-  <span class="k">AND</span> <span class="k">NOT</span> <span class="f">starts_with</span>(Invoice, <span class="s">&#x27;C&#x27;</span>)
-  <span class="k">AND</span> Quantity &gt; <span class="n">0</span>
-  <span class="k">AND</span> Price &gt; <span class="n">0</span>;
-
-<span class="k">SELECT</span> <span class="f">COUNT</span>(*) <span class="k">AS</span> clean_rows,
-       <span class="f">COUNT</span>(<span class="k">DISTINCT</span> customer_id) <span class="k">AS</span> customers
-<span class="k">FROM</span> sales;</code></pre>
-        </details>
-        <details class="step" open>
-          <summary><span class="num">4</span><span class="st"><b>Cohorts</b><small>Each customer&#x27;s cohort is the month of their first purchase. A window function turns monthly counts into retention %.</small></span></summary>
-          <pre class="code"><code><span class="k">CREATE</span> <span class="k">TABLE</span> cohorts <span class="k">AS</span>
-<span class="k">WITH</span> firsts <span class="k">AS</span> (
-    <span class="k">SELECT</span> customer_id,
-           <span class="f">date_trunc</span>(<span class="s">&#x27;month&#x27;</span>, <span class="f">MIN</span>(InvoiceDate)) <span class="k">AS</span> cohort_month
-    <span class="k">FROM</span> sales
-    <span class="k">GROUP BY</span> customer_id
-),
-activity <span class="k">AS</span> (
-    <span class="k">SELECT</span> <span class="k">DISTINCT</span>
-           s.customer_id,
-           f.cohort_month,
-           <span class="f">date_diff</span>(<span class="s">&#x27;month&#x27;</span>, f.cohort_month, <span class="f">date_trunc</span>(<span class="s">&#x27;month&#x27;</span>, s.InvoiceDate)) <span class="k">AS</span> month_number
-    <span class="k">FROM</span> sales s
-    <span class="k">JOIN</span> firsts f <span class="k">USING</span> (customer_id)
-)
-<span class="k">SELECT</span> cohort_month,
-       month_number,
-       <span class="f">COUNT</span>(*) <span class="k">AS</span> customers,
-       <span class="f">COUNT</span>(*) * <span class="n">1.0</span>
-         / <span class="f">FIRST_VALUE</span>(<span class="f">COUNT</span>(*)) <span class="k">OVER</span> (<span class="k">PARTITION BY</span> cohort_month <span class="k">ORDER BY</span> month_number) <span class="k">AS</span> retention
-<span class="k">FROM</span> activity
-<span class="k">GROUP BY</span> cohort_month, month_number
-<span class="k">ORDER BY</span> cohort_month, month_number;</code></pre>
-        </details>
-        <details class="step">
-          <summary><span class="num">5</span><span class="st"><b>RFM segments</b><small>Score every customer 1–5 on recency, frequency and spend with NTILE, then name the segments.</small></span></summary>
-          <pre class="code"><code><span class="k">CREATE</span> <span class="k">TABLE</span> rfm <span class="k">AS</span>
-<span class="k">WITH</span> ref <span class="k">AS</span> (
-    <span class="k">SELECT</span> <span class="f">MAX</span>(InvoiceDate) + <span class="k">INTERVAL</span> <span class="n">1</span> <span class="k">DAY</span> <span class="k">AS</span> ref_date <span class="k">FROM</span> sales
-),
-base <span class="k">AS</span> (
-    <span class="k">SELECT</span> customer_id,
-           <span class="f">date_diff</span>(<span class="s">&#x27;day&#x27;</span>, <span class="f">MAX</span>(InvoiceDate), (<span class="k">SELECT</span> ref_date <span class="k">FROM</span> ref)) <span class="k">AS</span> recency_days,
-           <span class="f">COUNT</span>(<span class="k">DISTINCT</span> Invoice) <span class="k">AS</span> frequency,
-           <span class="f">SUM</span>(revenue) <span class="k">AS</span> monetary
-    <span class="k">FROM</span> sales
-    <span class="k">GROUP BY</span> customer_id
-),
-scored <span class="k">AS</span> (
-    <span class="k">SELECT</span> *,
-           <span class="n">6</span> - <span class="f">NTILE</span>(<span class="n">5</span>) <span class="k">OVER</span> (<span class="k">ORDER BY</span> recency_days) <span class="k">AS</span> r_score,
-           <span class="f">NTILE</span>(<span class="n">5</span>) <span class="k">OVER</span> (<span class="k">ORDER BY</span> frequency) <span class="k">AS</span> f_score,
-           <span class="f">NTILE</span>(<span class="n">5</span>) <span class="k">OVER</span> (<span class="k">ORDER BY</span> monetary) <span class="k">AS</span> m_score
-    <span class="k">FROM</span> base
-)
-<span class="k">SELECT</span> *,
-       <span class="k">CASE</span>
-           <span class="k">WHEN</span> r_score &gt;= <span class="n">4</span> <span class="k">AND</span> f_score &gt;= <span class="n">4</span> <span class="k">THEN</span> <span class="s">&#x27;Champions&#x27;</span>
-           <span class="k">WHEN</span> r_score &gt;= <span class="n">3</span> <span class="k">AND</span> f_score &gt;= <span class="n">3</span> <span class="k">THEN</span> <span class="s">&#x27;Loyal&#x27;</span>
-           <span class="k">WHEN</span> r_score &gt;= <span class="n">4</span> <span class="k">AND</span> f_score &lt;= <span class="n">2</span> <span class="k">THEN</span> <span class="s">&#x27;New or promising&#x27;</span>
-           <span class="k">WHEN</span> r_score &lt;= <span class="n">2</span> <span class="k">AND</span> f_score &gt;= <span class="n">3</span> <span class="k">THEN</span> <span class="s">&#x27;At risk&#x27;</span>
-           <span class="k">WHEN</span> r_score &lt;= <span class="n">2</span> <span class="k">AND</span> f_score &lt;= <span class="n">2</span> <span class="k">THEN</span> <span class="s">&#x27;Lost&#x27;</span>
-           <span class="k">ELSE</span> <span class="s">&#x27;Needs attention&#x27;</span>
-       <span class="k">END</span> <span class="k">AS</span> segment
-<span class="k">FROM</span> scored;</code></pre>
-        </details>
-        <details class="step">
-          <summary><span class="num">6</span><span class="st"><b>Export</b><small>Write both result tables to CSV for Tableau.</small></span></summary>
-          <pre class="code"><code><span class="k">COPY</span> cohorts <span class="k">TO</span> <span class="s">&#x27;/Users/anna/Downloads/cohorts.csv&#x27;</span> (<span class="k">HEADER</span>);
-<span class="k">COPY</span> rfm <span class="k">TO</span> <span class="s">&#x27;/Users/anna/Downloads/rfm.csv&#x27;</span> (<span class="k">HEADER</span>);</code></pre>
-        </details>
-          </div>
-          <div class="dl-row">
-            <button class="dl copy-sql" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>Copy full script</button>
-            <a class="dl sql-file" href="customer_retention.sql" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download <small>.sql</small></a>
-          </div>
-          <div class="stack"><span>CTEs</span><span>Window functions</span><span>NTILE</span><span>FILTER aggregates</span><span>DuckDB</span></div>
-        </div>
-      </article>
-      <textarea id="sql-src" hidden>INSTALL excel;
-LOAD excel;
-
-
-CREATE TABLE raw (
-    Invoice       VARCHAR,
-    StockCode     VARCHAR,
-    Description   VARCHAR,
-    Quantity      INTEGER,
-    InvoiceDate   TIMESTAMP,
-    Price         DOUBLE,
-    &quot;Customer ID&quot; DOUBLE,
-    Country       VARCHAR
-);
-
-COPY raw FROM &#x27;/Users/anna/Downloads/online_retail_II.xlsx&#x27;
-    (FORMAT xlsx, SHEET &#x27;Year 2009-2010&#x27;, HEADER true);
-
-COPY raw FROM &#x27;/Users/anna/Downloads/online_retail_II.xlsx&#x27;
-    (FORMAT xlsx, SHEET &#x27;Year 2010-2011&#x27;, HEADER true);
-
-SELECT COUNT(*) FROM raw;
-
-SELECT
-    COUNT(*)                                                       AS total_rows,
-    COUNT(*) FILTER (WHERE &quot;Customer ID&quot; IS NULL)                  AS no_customer,
-    COUNT(*) FILTER (WHERE starts_with(Invoice, &#x27;C&#x27;))              AS cancellations,
-    COUNT(*) FILTER (WHERE Quantity &lt;= 0)                          AS zero_or_negative_qty,
-    COUNT(*) FILTER (WHERE Price &lt;= 0)                             AS zero_or_negative_price,
-    COUNT(*) - (SELECT COUNT(*) FROM (SELECT DISTINCT * FROM raw)) AS exact_duplicates
-FROM raw;
-
-CREATE TABLE sales AS
-SELECT DISTINCT
-    Invoice,
-    StockCode,
-    Description,
-    Quantity,
-    InvoiceDate,
-    Price,
-    &quot;Customer ID&quot; AS customer_id,
-    Country,
-    Quantity * Price AS revenue
-FROM raw
-WHERE &quot;Customer ID&quot; IS NOT NULL
-  AND NOT starts_with(Invoice, &#x27;C&#x27;)
-  AND Quantity &gt; 0
-  AND Price &gt; 0;
-
-SELECT COUNT(*) AS clean_rows,
-       COUNT(DISTINCT customer_id) AS customers
-FROM sales;
-
-CREATE TABLE cohorts AS
-WITH firsts AS (
-    SELECT customer_id,
-           date_trunc(&#x27;month&#x27;, MIN(InvoiceDate)) AS cohort_month
-    FROM sales
-    GROUP BY customer_id
-),
-activity AS (
-    SELECT DISTINCT
-           s.customer_id,
-           f.cohort_month,
-           date_diff(&#x27;month&#x27;, f.cohort_month, date_trunc(&#x27;month&#x27;, s.InvoiceDate)) AS month_number
-    FROM sales s
-    JOIN firsts f USING (customer_id)
-)
-SELECT cohort_month,
-       month_number,
-       COUNT(*) AS customers,
-       COUNT(*) * 1.0
-         / FIRST_VALUE(COUNT(*)) OVER (PARTITION BY cohort_month ORDER BY month_number) AS retention
-FROM activity
-GROUP BY cohort_month, month_number
-ORDER BY cohort_month, month_number;
-
-CREATE TABLE rfm AS
-WITH ref AS (
-    SELECT MAX(InvoiceDate) + INTERVAL 1 DAY AS ref_date FROM sales
-),
-base AS (
-    SELECT customer_id,
-           date_diff(&#x27;day&#x27;, MAX(InvoiceDate), (SELECT ref_date FROM ref)) AS recency_days,
-           COUNT(DISTINCT Invoice) AS frequency,
-           SUM(revenue) AS monetary
-    FROM sales
-    GROUP BY customer_id
-),
-scored AS (
-    SELECT *,
-           6 - NTILE(5) OVER (ORDER BY recency_days) AS r_score,
-           NTILE(5) OVER (ORDER BY frequency) AS f_score,
-           NTILE(5) OVER (ORDER BY monetary) AS m_score
-    FROM base
-)
-SELECT *,
-       CASE
-           WHEN r_score &gt;= 4 AND f_score &gt;= 4 THEN &#x27;Champions&#x27;
-           WHEN r_score &gt;= 3 AND f_score &gt;= 3 THEN &#x27;Loyal&#x27;
-           WHEN r_score &gt;= 4 AND f_score &lt;= 2 THEN &#x27;New or promising&#x27;
-           WHEN r_score &lt;= 2 AND f_score &gt;= 3 THEN &#x27;At risk&#x27;
-           WHEN r_score &lt;= 2 AND f_score &lt;= 2 THEN &#x27;Lost&#x27;
-           ELSE &#x27;Needs attention&#x27;
-       END AS segment
-FROM scored;
-
-COPY cohorts TO &#x27;/Users/anna/Downloads/cohorts.csv&#x27; (HEADER);
-COPY rfm TO &#x27;/Users/anna/Downloads/rfm.csv&#x27; (HEADER);
-</textarea>
+      <div class="sql-grid">
+        <article class="sql-mini">
+          <span class="tag mint" style="align-self:flex-start">Customer retention</span>
+          <h4>From 1M raw order lines to cohorts and RFM segments</h4>
+          <p>Data-quality checks, cleaning, monthly cohorts and customer segments, ready for Tableau.</p>
+          <div class="stack"><span>CTEs</span><span>Window functions</span><span>NTILE</span><span>FILTER</span></div>
+          <a class="dl" href="https://github.com/annakostiuchenko/sql-portfolio/blob/main/customer_retention.sql" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>View on GitHub</a>
+        </article>
+        <article class="sql-mini">
+          <span class="tag mint" style="align-self:flex-start">Dutch housing</span>
+          <h4>30 years of CBS data for 342 municipalities</h4>
+          <p>Joins CBS code tables, handles merged municipalities and ranks growth with 3-year averages.</p>
+          <div class="stack"><span>Joins</span><span>RANK()</span><span>UNION ALL</span><span>Sanity checks</span></div>
+          <a class="dl" href="https://github.com/annakostiuchenko/sql-portfolio/blob/main/nl_housing.sql" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.45-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.65 0 0 .84-.27 2.75 1.02a9.5 9.5 0 0 1 5 0c1.91-1.29 2.75-1.02 2.75-1.02.55 1.38.2 2.4.1 2.65.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85v2.74c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>View on GitHub</a>
+        </article>
+      </div>
     </div>
 
     <!-- AI & Agents -->
