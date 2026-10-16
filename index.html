@@ -416,6 +416,32 @@ footer{padding-block:30px 40px;text-align:center;color:var(--muted);font-size:.8
         <div><h3>Tableau</h3><p>Calculated fields, statistical testing and storytelling</p></div>
       </div>
       <article class="project side-by-side">
+        <button class="shot mint" type="button" data-full="tableau-bleckmann.jpg" aria-label="Open the Driver Voice dashboard for Bleckmann Almelo full size">
+          <div class="frame"><div class="dots"><i></i><i></i><i></i></div>
+            <div class="tall"><img src="tableau-bleckmann.jpg" alt="Tableau dashboard of truck-driver Google reviews for Bleckmann Almelo: KPI tiles, a donut of who reviews, topics by sentiment, average sentiment over time, driver quotes and recommendations" loading="lazy"></div>
+          </div>
+        </button>
+        <div class="p-body">
+          <span class="tag mint" style="align-self:flex-start">Real public data · AI + Tableau</span>
+          <h4>Driver Voice · Bleckmann Almelo</h4>
+          <p>What do truck drivers say about loading and unloading at Bleckmann's Almelo warehouse? I collected 162 public Google reviews in 15 languages and had Gemini classify each one by reviewer type, topic and sentiment, and pull out the reported waiting time. A daily Apps Script trigger tags new reviews automatically, and Tableau turns the result into a dashboard.</p>
+          <div class="kpis">
+            <div class="kpi"><b>74%</b><span>of driver reviews are positive</span></div>
+            <div class="kpi"><b>80%</b><span>out within an hour (of those who mention a time)</span></div>
+            <div class="kpi"><b>30 min</b><span>median reported wait</span></div>
+          </div>
+          <p class="label">Key insights</p>
+          <ul class="find">
+            <li>Fast loading and friendly staff are what drivers mention most, and mostly positively.</li>
+            <li>Check-in and paperwork has the highest share of negative mentions, together with an unanswered intercom at the gate.</li>
+            <li>The next step would be to check reported waits against dock-appointment and gate data from the warehouse systems.</li>
+          </ul>
+          <p class="dl-note">Data: public Google Maps reviews, collected October 2026, reviewer names removed. Dates are approximate, and the wait-time figures rest on the 15 driver reviews that mention a time. Independent analysis, not affiliated with Bleckmann.</p>
+          <div class="dl-row"><a class="dl primary" href="https://public.tableau.com/app/profile/anna.kostiuchenko/viz/BleckmannAlmelo/Dashboard1" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>View interactive dashboard</a></div>
+          <div class="stack"><span>Tableau</span><span>Gemini API</span><span>Apps Script</span><span>Google Sheets</span><span>Text classification</span></div>
+        </div>
+      </article>
+      <article class="project side-by-side" style="margin-top:22px">
         <button class="shot" type="button" data-full="tableau-ab-testing.jpg" aria-label="Open the Tableau A/B testing dashboard full size">
           <div class="frame"><div class="dots"><i></i><i></i><i></i></div>
             <div class="tall"><img src="tableau-ab-testing.jpg" alt="Tableau campaign performance dashboard: KPI tiles, monthly CTR for control vs test, conversion rate by group and campaign, and a p-value of 0.0064" loading="lazy"></div>
@@ -436,7 +462,7 @@ footer{padding-block:30px 40px;text-align:center;color:var(--muted);font-size:.8
             <li>Campaign B's Test group converts best (9.10% vs 8.35% for Campaign A).</li>
             <li>Recommendation: prioritise the Test variants, especially B, and confirm with a live randomized experiment before full rollout.</li>
           </ul>
-          <div class="dl-row"><a class="dl" href="Marketing_AB_testing_report.twbx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download workbook <small>.twbx</small></a></div>
+          <div class="dl-row"><a class="dl primary" href="https://public.tableau.com/app/profile/anna.kostiuchenko/viz/CmpaignPerformanceABtest/Dashboard1" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>View interactive dashboard</a><a class="dl" href="Marketing_AB_testing_report.twbx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download workbook <small>.twbx</small></a></div>
           <div class="stack"><span>Tableau</span><span>Calculated fields</span><span>Two-proportion Z-test</span><span>KPI tiles</span></div>
         </div>
       </article>
@@ -462,7 +488,7 @@ footer{padding-block:30px 40px;text-align:center;color:var(--muted);font-size:.8
             <li>Recommendation: a January win-back campaign for holiday first-time buyers, and targeting the At-risk segment (12% of customers, 9% of revenue) before they are lost.</li>
           </ul>
           <p class="dl-note">Data ends 9 Dec 2011, so each cohort's last month is incomplete. The SQL is in the <a href="#sql">SQL section</a>.</p>
-          <div class="dl-row"><a class="dl" href="Customer_Retention_Project.twbx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download workbook <small>.twbx</small></a></div>
+          <div class="dl-row"><a class="dl primary" href="https://public.tableau.com/app/profile/anna.kostiuchenko/viz/CustomerRetentionProject_17921471552030/Dashboard1" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>View interactive dashboard</a><a class="dl" href="Customer_Retention_Project.twbx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download workbook <small>.twbx</small></a></div>
           <div class="stack"><span>Tableau</span><span>DuckDB SQL</span><span>Cohort analysis</span><span>RFM segmentation</span></div>
         </div>
       </article>
@@ -488,7 +514,7 @@ footer{padding-block:30px 40px;text-align:center;color:var(--muted);font-size:.8
             <li>Growth uses 3-year averages (2013–15 vs 2023–25), so one unusual year can't distort the ranking. Diemen still tops the list, partly because of a jump in 2018 that likely reflects more new-build sales.</li>
           </ul>
           <p class="dl-note">Data: CBS table 83625NED, average sale price of existing homes. This is not a price index, so changes in which homes are sold affect it.</p>
-          <div class="dl-row"><a class="dl" href="Dutch_Housing_Dashboard.twbx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download workbook <small>.twbx</small></a></div>
+          <div class="dl-row"><a class="dl primary" href="https://public.tableau.com/app/profile/anna.kostiuchenko/viz/DutchHousingDashboard/Dashboard1" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>View interactive dashboard</a><a class="dl" href="Dutch_Housing_Dashboard.twbx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download workbook <small>.twbx</small></a></div>
           <div class="stack"><span>Tableau</span><span>DuckDB SQL</span><span>LOD expressions</span><span>Parameters</span><span>Maps</span></div>
         </div>
       </article>
