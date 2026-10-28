@@ -500,61 +500,17 @@ footer{padding-block:30px 40px;text-align:center;color:var(--muted);font-size:.8
           <div class="stack"><span>Tableau</span><span>Calculated fields</span><span>Two-proportion Z-test</span><span>KPI tiles</span></div>
         </div>
       </article>
-      <article class="project side-by-side" style="margin-top:22px">
-        <button class="shot mint" type="button" data-full="tableau-housing.jpg" aria-label="Open the Tableau Dutch housing dashboard full size">
-          <div class="frame"><div class="dots"><i></i><i></i><i></i></div>
-            <div class="tall"><img src="tableau-housing.jpg" alt="Tableau dashboard of Dutch house prices 1995–2025: national trend, Enschede compared with the Netherlands, the 15 fastest-rising municipalities and a province map coloured by growth" loading="lazy"></div>
-          </div>
-        </button>
-        <div class="p-body">
-          <span class="tag mint" style="align-self:flex-start">Public data · SQL + Tableau</span>
-          <h4>Dutch Housing Market · 1995–2025</h4>
-          <p>How much have Dutch house prices risen, and where? I joined and cleaned 30 years of official CBS data for all 342 municipalities in SQL, then built a Tableau dashboard where you can compare any municipality with the national average.</p>
-          <div class="kpis">
-            <div class="kpi"><b>~5×</b><span>national average price, 1995 to 2025 (€480K)</span></div>
-            <div class="kpi"><b>Flevoland</b><span>fastest-rising province since 2015</span></div>
-            <div class="kpi"><b>−22%</b><span>Enschede below the national average</span></div>
-          </div>
-          <p class="label">Key insights</p>
-          <ul class="find">
-            <li>Prices dipped after 2008 and again in 2022–23, but the long-term rise is steep.</li>
-            <li>The fastest risers are commuter towns around Amsterdam and in Flevoland, such as Almere, Purmerend and Lelystad.</li>
-            <li>Growth uses 3-year averages (2013–15 vs 2023–25), so one unusual year can't distort the ranking. Diemen still tops the list, partly because of a jump in 2018 that likely reflects more new-build sales.</li>
-          </ul>
-          <p class="dl-note">Data: CBS table 83625NED, average sale price of existing homes. This is not a price index, so changes in which homes are sold affect it.</p>
-          <div class="dl-row"><a class="dl primary" href="https://public.tableau.com/app/profile/anna.kostiuchenko/viz/DutchHousingDashboard/Dashboard1" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>View interactive dashboard</a><a class="dl" href="Dutch_Housing_Dashboard.twbx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download workbook <small>.twbx</small></a></div>
-          <div class="stack"><span>Tableau</span><span>DuckDB SQL</span><span>LOD expressions</span><span>Parameters</span><span>Maps</span></div>
-        </div>
-      </article>
-      <article class="project side-by-side" style="margin-top:22px">
-        <button class="shot blush" type="button" data-full="tableau-bleckmann.jpg" aria-label="Open the Driver Voice logistics dashboard full size">
-          <div class="frame"><div class="dots"><i></i><i></i><i></i></div>
-            <div class="tall"><img src="tableau-bleckmann.jpg" alt="Tableau dashboard of truck-driver Google reviews for a logistics warehouse: KPI tiles, a donut of who reviews, topics by sentiment, average sentiment over time, driver quotes and recommendations" loading="lazy"></div>
-          </div>
-        </button>
-        <div class="p-body">
-          <span class="tag blush" style="align-self:flex-start">Real public data · AI + Tableau</span>
-          <h4>Driver Voice · Logistics Warehouse</h4>
-          <p>What do truck drivers say about loading and unloading at a large logistics warehouse in the Netherlands? I collected 162 public Google reviews in 15 languages and had Gemini classify each one by reviewer type, topic and sentiment, and pull out the reported waiting time. A daily Apps Script trigger tags new reviews automatically, and Tableau turns the result into a dashboard.</p>
-          <div class="kpis">
-            <div class="kpi"><b>74%</b><span>of driver reviews are positive</span></div>
-            <div class="kpi"><b>80%</b><span>out within an hour (of those who mention a time)</span></div>
-            <div class="kpi"><b>30 min</b><span>median reported wait</span></div>
-          </div>
-          <p class="label">Key insights</p>
-          <ul class="find">
-            <li>Fast loading and friendly staff are what drivers mention most, and mostly positively.</li>
-            <li>Check-in and paperwork has the highest share of negative mentions, together with an unanswered intercom at the gate.</li>
-            <li>The next step would be to check reported waits against dock-appointment and gate data from the warehouse systems.</li>
-          </ul>
-          <p class="dl-note">Data: public Google Maps reviews, collected October 2026, reviewer names removed. Dates are approximate, and the wait-time figures rest on the 15 driver reviews that mention a time. Independent analysis, not affiliated with the company.</p>
-          <div class="dl-row"><a class="dl primary" href="https://public.tableau.com/app/profile/anna.kostiuchenko/viz/BleckmannAlmelo/Dashboard1" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>View interactive dashboard</a></div>
-          <div class="stack"><span>Tableau</span><span>Gemini API</span><span>Apps Script</span><span>Google Sheets</span><span>Text classification</span></div>
-        </div>
-      </article>
       <div class="more-dash">
         <p class="label">More dashboards</p>
         <div class="more-grid">
+          <a class="mini" href="https://public.tableau.com/app/profile/anna.kostiuchenko/viz/DutchHousingDashboard/Dashboard1" target="_blank" rel="noopener">
+            <img src="tableau-housing.jpg" alt="Dutch housing market dashboard preview" loading="lazy">
+            <span><b>Dutch Housing Market</b>30 years of CBS data · SQL + Tableau</span>
+          </a>
+          <a class="mini" href="https://public.tableau.com/app/profile/anna.kostiuchenko/viz/BleckmannAlmelo/Dashboard1" target="_blank" rel="noopener">
+            <img src="tableau-bleckmann.jpg" alt="Driver Voice logistics dashboard preview" loading="lazy">
+            <span><b>Driver Voice · Logistics</b>Reviews tagged with AI · Gemini + Tableau</span>
+          </a>
           <a class="mini" href="https://public.tableau.com/app/profile/anna.kostiuchenko/viz/CustomerRetentionProject_17921471552030/Dashboard1" target="_blank" rel="noopener">
             <img src="tableau-retention.jpg" alt="Customer retention dashboard preview" loading="lazy">
             <span><b>Customer Retention</b>Cohorts and RFM segments · SQL + Tableau</span>
