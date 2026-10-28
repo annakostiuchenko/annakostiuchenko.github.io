@@ -236,6 +236,14 @@ a.dl{text-decoration:none}
   font-size:.85rem;font-weight:700;color:var(--ink);background:linear-gradient(transparent,var(--surface) 70%)}
 .shot.mint{background:var(--mint-soft)}
 .shot.blush{background:var(--blush-soft)}
+.more-dash{margin-top:26px;display:flex;flex-direction:column;gap:14px}
+.more-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.mini{display:flex;flex-direction:column;background:var(--surface);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;text-decoration:none;color:inherit;transition:transform .2s ease}
+.mini:hover{transform:translateY(-2px)}
+.mini img{width:100%;aspect-ratio:16/10;object-fit:cover;object-position:top;display:block;border-bottom:1px solid var(--line)}
+.mini span{padding:12px 14px;font-size:.84rem;color:var(--muted);display:flex;flex-direction:column;gap:2px}
+.mini b{color:var(--ink);font-size:.95rem}
+.see-more{align-self:flex-start;text-decoration:none}
 .p-body{padding:26px;display:flex;flex-direction:column;gap:14px;min-width:0}
 .p-body h4{font-family:var(--f-display);font-weight:600;font-size:1.35rem;margin:0}
 .p-body p{margin:0;color:var(--muted)}
@@ -416,6 +424,32 @@ footer{padding-block:30px 40px;text-align:center;color:var(--muted);font-size:.8
         <div><h3>Tableau</h3><p>Calculated fields, statistical testing and storytelling</p></div>
       </div>
       <article class="project side-by-side">
+        <button class="shot blush" type="button" data-full="tableau-adidas.jpg" aria-label="Open the Adidas US sales dashboard full size">
+          <div class="frame"><div class="dots"><i></i><i></i><i></i></div>
+            <div class="tall"><img src="tableau-adidas.jpg" alt="Tableau Adidas US sales dashboard: dark header with year and month selectors, four KPI cards for sales, profit, units and operating margin with month-over-month change and mini bar charts, monthly sales and profit lines, sales by method donut, sales by product bars and a retailer breakdown" loading="lazy"></div>
+          </div>
+        </button>
+        <div class="p-body">
+          <span class="tag blush" style="align-self:flex-start">Sales analytics · Tableau</span>
+          <h4>Adidas US Sales · Performance Overview</h4>
+          <p>A sales performance dashboard for Adidas in the US (2020–2021). Pick a year and month, and every KPI card compares it with the month before, with green or red arrows that switch automatically. Below, sales and profit trends, sales channels, products and retailers.</p>
+          <div class="kpis">
+            <div class="kpi"><b>$95.9M</b><span>sales in 2021, at a 40% operating margin</span></div>
+            <div class="kpi"><b>42%</b><span>of 2021 sales came through online</span></div>
+            <div class="kpi"><b>40%</b><span>of source rows had a 10× sales error, fixed</span></div>
+          </div>
+          <p class="label">Key insights</p>
+          <ul class="find">
+            <li>July and December are the strongest months of 2021, each above $10M in sales.</li>
+            <li>Foot Locker, Sports Direct and West Gear together bring in about two thirds of retailer sales.</li>
+            <li>Data quality: in about 40% of rows Total Sales was recorded 10× too high, so I recalculated sales and profit from price × units before building anything.</li>
+          </ul>
+          <p class="dl-note">Data: public Adidas US Sales dataset. Built with parameters, period-over-period calculations and dynamic text.</p>
+          <div class="dl-row"><a class="dl primary" href="https://public.tableau.com/views/Adidas_17931932119000/Dashboard1" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>View interactive dashboard</a></div>
+          <div class="stack"><span>Tableau</span><span>Parameters</span><span>Period-over-period KPIs</span><span>Data cleaning</span></div>
+        </div>
+      </article>
+      <article class="project side-by-side" style="margin-top:22px">
         <button class="shot mint" type="button" data-full="tableau-hr.jpg" aria-label="Open the HR overview dashboard full size">
           <div class="frame"><div class="dots"><i></i><i></i><i></i></div>
             <div class="tall"><img src="tableau-hr.jpg" alt="Tableau HR overview dashboard: KPI row with hired and active employees, attrition, age and tenure, employees by department, a map of Dutch provinces, hiring trend, attrition by department, gender split and age groups" loading="lazy"></div>
@@ -518,32 +552,16 @@ footer{padding-block:30px 40px;text-align:center;color:var(--muted);font-size:.8
           <div class="stack"><span>Tableau</span><span>Gemini API</span><span>Apps Script</span><span>Google Sheets</span><span>Text classification</span></div>
         </div>
       </article>
-      <article class="project side-by-side" style="margin-top:22px">
-        <button class="shot" type="button" data-full="tableau-retention.jpg" aria-label="Open the Tableau customer retention dashboard full size">
-          <div class="frame"><div class="dots"><i></i><i></i><i></i></div>
-            <div class="tall"><img src="tableau-retention.jpg" alt="Tableau customer retention dashboard: KPI tiles, a cohort retention heatmap, month-1 retention by first-purchase month with December highlighted, and RFM segments comparing share of customers with share of revenue" loading="lazy"></div>
-          </div>
-        </button>
-        <div class="p-body">
-          <span class="tag blue" style="align-self:flex-start">Retention · SQL + Tableau</span>
-          <h4>Customer Retention · Online Retail 2009–2011</h4>
-          <p>Who comes back after their first purchase, and who brings the revenue? I cleaned about 1 million order lines of a UK online retailer in SQL, built monthly cohorts and RFM segments, and visualised them in Tableau.</p>
-          <div class="kpis">
-            <div class="kpi"><b>~1 in 5</b><span>new customers buy again the next month</span></div>
-            <div class="kpi"><b>9%</b><span>Dec 2010 newcomers back next month, vs 21% avg</span></div>
-            <div class="kpi"><b>70%</b><span>of revenue from 27% of customers</span></div>
-          </div>
-          <p class="label">Key insights</p>
-          <ul class="find">
-            <li>December shoppers are the least loyal, while lapsed customers from every cohort return each November, so retention is seasonal.</li>
-            <li>Champions (27% of customers) bring 70% of revenue; Lost customers (28%) bring just 4%.</li>
-            <li>Recommendation: a January win-back campaign for holiday first-time buyers, and targeting the At-risk segment (12% of customers, 9% of revenue) before they are lost.</li>
-          </ul>
-          <p class="dl-note">Data ends 9 Dec 2011, so each cohort's last month is incomplete. The SQL is in the <a href="#sql">SQL section</a>.</p>
-          <div class="dl-row"><a class="dl primary" href="https://public.tableau.com/app/profile/anna.kostiuchenko/viz/CustomerRetentionProject_17921471552030/Dashboard1" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>View interactive dashboard</a><a class="dl" href="Customer_Retention_Project.twbx" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Download workbook <small>.twbx</small></a></div>
-          <div class="stack"><span>Tableau</span><span>DuckDB SQL</span><span>Cohort analysis</span><span>RFM segmentation</span></div>
+      <div class="more-dash">
+        <p class="label">More dashboards</p>
+        <div class="more-grid">
+          <a class="mini" href="https://public.tableau.com/app/profile/anna.kostiuchenko/viz/CustomerRetentionProject_17921471552030/Dashboard1" target="_blank" rel="noopener">
+            <img src="tableau-retention.jpg" alt="Customer retention dashboard preview" loading="lazy">
+            <span><b>Customer Retention</b>Cohorts and RFM segments · SQL + Tableau</span>
+          </a>
         </div>
-      </article>
+        <a class="dl primary see-more" href="https://public.tableau.com/app/profile/anna.kostiuchenko/vizzes" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>See more dashboards on Tableau Public</a>
+      </div>
     </div>
 
     <!-- Power BI -->
