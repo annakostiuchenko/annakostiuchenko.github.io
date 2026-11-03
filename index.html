@@ -527,6 +527,31 @@ footer{padding-block:30px 40px;text-align:center;color:var(--muted);font-size:.8
         <div><h3>Power BI</h3><p>DAX, data modelling and performance monitoring</p></div>
       </div>
       <article class="project">
+        <button class="shot mint" type="button" data-full="powerbi-logistics.jpg" aria-label="Open the Power BI shipping performance report full size">
+          <div class="frame"><div class="dots"><i></i><i></i><i></i></div>
+            <img src="powerbi-logistics.jpg" alt="Power BI shipping performance report: KPI cards for shipments, on-time percentage, average delivery days and average cost, on-time delivery by month against a 90% target, on-time percentage by carrier, shipments by country and a carrier scorecard" loading="lazy">
+          </div>
+        </button>
+        <div class="p-body">
+          <span class="tag mint" style="align-self:flex-start">Logistics · fictional data</span>
+          <h4>Shipping Performance 2025 · Carriers &amp; Delivery</h4>
+          <p>A logistics report on 12,000 parcel shipments from four European warehouses, sent with five carriers to ten countries. It answers a real logistics question: is the cheapest carrier worth it? Warehouse and service-level slicers filter the whole page.</p>
+          <div class="kpis">
+            <div class="kpi"><b>87.7%</b><span>of shipments delivered on time</span></div>
+            <div class="kpi"><b>~81%</b><span>on time in Nov–Dec, below the 90% target</span></div>
+            <div class="kpi"><b>74.9%</b><span>on time for the cheapest carrier</span></div>
+          </div>
+          <p class="label">Key insights</p>
+          <ul class="find">
+            <li>On-time delivery holds around 90% for most of the year, then drops to about 81% in the November–December peak.</li>
+            <li>BlueRoute is the cheapest carrier (€9.40 per shipment) but has the lowest on-time rate and more than twice the damage rate of the others.</li>
+            <li>SwiftLine costs more (€12.30) but delivers 94% on time, so moving peak-season volume there is worth testing.</li>
+          </ul>
+          <p class="dl-note">Data: fictional, generated for practice. Built as a star schema (shipments fact table with carrier, warehouse, destination and date dimensions) with DAX measures.</p>
+          <div class="stack"><span>Power BI</span><span>Star schema</span><span>DAX measures</span><span>Conditional formatting</span></div>
+        </div>
+      </article>
+      <article class="project" style="margin-top:22px">
         <button class="shot blush" type="button" data-full="powerbi-campaigns.jpg" aria-label="Open the Power BI campaign report full size">
           <div class="frame"><div class="dots"><i></i><i></i><i></i></div>
             <img src="powerbi-campaigns.jpg" alt="Power BI report: campaign funnel matrix for Birthday Promo and Holidays Promo by banner, slicers for month, campaign, banner, group and product, conversion by banner and a Z-test significance table" loading="lazy">
